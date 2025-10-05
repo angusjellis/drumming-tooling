@@ -1,0 +1,26 @@
+{
+  "name": "@drumming-cli/drumming-cli-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@drumming-cli/drumming-cli"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/drumming-cli-e2e/jest.config.ts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@drumming-cli/drumming-cli:build",
+          "@drumming-cli/drumming-cli:serve"
+        ]
+      }
+    }
+  }
+}
