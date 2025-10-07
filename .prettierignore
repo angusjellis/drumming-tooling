@@ -1,5 +1,17 @@
-# Add files here to ignore them from prettier formatting
-/dist
-/coverage
-/.nx/cache
-/.nx/workspace-data
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+tmp/
+
+# Generated files
+*.d.ts
+*.d.ts.map
+*.js.map
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
