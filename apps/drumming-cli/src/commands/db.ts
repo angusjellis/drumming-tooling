@@ -81,7 +81,8 @@ function createRudimentCommand(): Command {
           description: answers.description,
           duration: answers.duration,
           difficulty: answers.difficulty,
-          url: answers.url || null
+          url: answers.url || null,
+          platform: answers.platform
         });
 
         console.log(chalk.green(`✅ Added rudiment: ${rudiment.name}`));
@@ -174,6 +175,8 @@ function createSongCommand(): Command {
           artist: answers.artist,
           description: answers.description,
           tempo: answers.tempo,
+          length: answers.length,
+          platform: answers.platform,
           difficulty: answers.difficulty,
           url: answers.url || null
         });
