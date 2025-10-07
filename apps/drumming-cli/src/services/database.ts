@@ -1,6 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// A Rudiment is a single drumming exercise that is used to practice a specific technique or pattern.
+// Rudiments are good warm-up exercises for beginners, and can aid in developing technique and coordination.
+// TODO: parse sheet music to get the rudiments and patterns used in the exercise.
+// TODO: Use a midi file to score the user's drumming.
 export interface Rudiment {
   id: string;
   name: string;
@@ -10,16 +14,36 @@ export interface Rudiment {
   url: string | null;
   createdAt: string;
   updatedAt: string;
+  platform: 'songsterr' | 'drumeo' | 'youtube' | 'other';
 }
 
+// Songs are pieces of recorded music that are used to practice drumming.
+// They will combine different rudiments and patterns to create a complete piece of music.
+// TODO: Compare sheet music with a midi recording to test accuracy of of the user's drumming.
 export interface Song {
   id: string;
   title: string;
   artist: string;
   description: string;
   tempo: number;
+  length: number;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   url: string | null;
+  createdAt: string;
+  updatedAt: string;
+  platform: 'songsterr' | 'drumeo' | 'youtube' | 'other';
+}
+
+// Exercises are a combination of rudiments and patterns that are used to practice a specific technique or pattern.
+// TODO: parse sheet music to get the rudiments and patterns used in the exercise.
+// TODO: Use a midi file to score the user's drumming.
+export interface Exercise {
+  id: string;
+  name: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  url: string | null;
+  platform: 'songsterr' | 'drumeo' | 'youtube' | 'other';
   createdAt: string;
   updatedAt: string;
 }
@@ -27,13 +51,15 @@ export interface Song {
 export interface Database {
   rudiments: Rudiment[];
   songs: Song[];
+  exercises: Exercise[];
 }
 
 export class DatabaseService {
   private dbPath: string;
 
   constructor() {
-    this.dbPath = path.join(__dirname, '../data/database.json');
+    // Use process.cwd() to get the workspace root, then navigate to the data file
+    this.dbPath = path.join(process.cwd(), 'apps/drumming-cli/src/data/database.json');
   }
 
   private readDatabase(): Database {
