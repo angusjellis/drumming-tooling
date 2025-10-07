@@ -14,14 +14,16 @@ export const rhythmCommand = new Command('rhythm')
     let selectedRhythm: Song;
 
     if (options.rhythm) {
-      const foundRhythm = db.getAllSongs().find(song => 
-        song.title.toLowerCase().includes(options.rhythm.toLowerCase())
-      );
-      
+      const foundRhythm = db
+        .getAllSongs()
+        .find((song) =>
+          song.title.toLowerCase().includes(options.rhythm.toLowerCase())
+        );
+
       if (!foundRhythm) {
         console.error(chalk.red(`Rhythm "${options.rhythm}" not found.`));
         console.log(chalk.yellow('Available rhythms:'));
-        db.getAllSongs().forEach(song => {
+        db.getAllSongs().forEach((song) => {
           console.log(chalk.gray(`  - ${song.title} (${song.difficulty})`));
         });
         process.exit(1);
@@ -34,16 +36,18 @@ export const rhythmCommand = new Command('rhythm')
           type: 'list',
           name: 'rhythm',
           message: 'Choose a rhythm to practice:',
-          choices: db.getAllSongs().map(song => ({
+          choices: db.getAllSongs().map((song) => ({
             name: `${song.title} (${song.difficulty}) - ${song.description}`,
-            value: song
-          }))
-        }
+            value: song,
+          })),
+        },
       ]);
       selectedRhythm = rhythm;
     }
 
-    const tempo = options.tempo ? parseInt(options.tempo) : selectedRhythm.tempo;
+    const tempo = options.tempo
+      ? parseInt(options.tempo)
+      : selectedRhythm.tempo;
     const duration = parseInt(options.duration) * 60; // Convert to seconds
 
     console.log(chalk.cyan('🥁 Rhythm Practice Starting'));
@@ -69,12 +73,16 @@ export const rhythmCommand = new Command('rhythm')
     const rhythmInterval = setInterval(() => {
       beatCount++;
       const beatInMeasure = ((beatCount - 1) % 4) + 1;
-      
+
       // Visual beat indicator
       if (beatInMeasure === 1) {
-        spinner.text = chalk.green(`🔴 BEAT ${beatCount} - ${selectedRhythm.title}`);
+        spinner.text = chalk.green(
+          `🔴 BEAT ${beatCount} - ${selectedRhythm.title}`
+        );
       } else {
-        spinner.text = chalk.blue(`🔵 beat ${beatCount} - ${selectedRhythm.title}`);
+        spinner.text = chalk.blue(
+          `🔵 beat ${beatCount} - ${selectedRhythm.title}`
+        );
       }
 
       // Audio feedback (console beep)
@@ -101,7 +109,13 @@ export const rhythmCommand = new Command('rhythm')
       clearInterval(durationInterval);
       spinner.stop();
       console.log(chalk.yellow('\nRhythm practice ended early.'));
-      console.log(chalk.gray(`You practiced for ${Math.floor(elapsed / 60)}:${(elapsed % 60).toString().padStart(2, '0')}`));
+      console.log(
+        chalk.gray(
+          `You practiced for ${Math.floor(elapsed / 60)}:${(elapsed % 60)
+            .toString()
+            .padStart(2, '0')}`
+        )
+      );
       process.exit(0);
     });
   });

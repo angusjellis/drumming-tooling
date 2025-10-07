@@ -13,14 +13,16 @@ export const practiceCommand = new Command('practice')
     let selectedExercise: Rudiment;
 
     if (options.exercise) {
-      const foundExercise = db.getAllRudiments().find(ex => 
-        ex.name.toLowerCase().includes(options.exercise.toLowerCase())
-      );
-      
+      const foundExercise = db
+        .getAllRudiments()
+        .find((ex) =>
+          ex.name.toLowerCase().includes(options.exercise.toLowerCase())
+        );
+
       if (!foundExercise) {
         console.error(chalk.red(`Exercise "${options.exercise}" not found.`));
         console.log(chalk.yellow('Available exercises:'));
-        db.getAllRudiments().forEach(ex => {
+        db.getAllRudiments().forEach((ex) => {
           console.log(chalk.gray(`  - ${ex.name} (${ex.difficulty})`));
         });
         process.exit(1);
@@ -33,11 +35,11 @@ export const practiceCommand = new Command('practice')
           type: 'list',
           name: 'exercise',
           message: 'Choose a practice exercise:',
-          choices: db.getAllRudiments().map(ex => ({
+          choices: db.getAllRudiments().map((ex) => ({
             name: `${ex.name} (${ex.difficulty}) - ${ex.description}`,
-            value: ex
-          }))
-        }
+            value: ex,
+          })),
+        },
       ]);
       selectedExercise = exercise;
     }
@@ -66,10 +68,16 @@ export const practiceCommand = new Command('practice')
       const progress = (elapsed / actualDuration) * 100;
 
       if (remaining > 0) {
-        spinner.text = `Practicing ${selectedExercise.name}... ${Math.floor(remaining / 60)}:${(remaining % 60).toString().padStart(2, '0')} remaining (${progress.toFixed(1)}%)`;
+        spinner.text = `Practicing ${selectedExercise.name}... ${Math.floor(
+          remaining / 60
+        )}:${(remaining % 60)
+          .toString()
+          .padStart(2, '0')} remaining (${progress.toFixed(1)}%)`;
       } else {
         clearInterval(practiceInterval);
-        spinner.succeed(chalk.green(`Practice session completed! Great job! 🎉`));
+        spinner.succeed(
+          chalk.green(`Practice session completed! Great job! 🎉`)
+        );
         console.log(chalk.cyan('Keep up the great work!'));
         process.exit(0);
       }
@@ -80,7 +88,13 @@ export const practiceCommand = new Command('practice')
       clearInterval(practiceInterval);
       spinner.stop();
       console.log(chalk.yellow('\nPractice session ended early.'));
-      console.log(chalk.gray(`You practiced for ${Math.floor(elapsed / 60)}:${(elapsed % 60).toString().padStart(2, '0')}`));
+      console.log(
+        chalk.gray(
+          `You practiced for ${Math.floor(elapsed / 60)}:${(elapsed % 60)
+            .toString()
+            .padStart(2, '0')}`
+        )
+      );
       process.exit(0);
     });
   });

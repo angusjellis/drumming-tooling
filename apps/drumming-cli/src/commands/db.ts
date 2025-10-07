@@ -25,7 +25,7 @@ function createRudimentCommand(): Command {
             return true;
           }
           return 'Name is required';
-        }
+        },
       };
 
       const descriptionQuestion = {
@@ -37,7 +37,7 @@ function createRudimentCommand(): Command {
             return true;
           }
           return 'Description is required';
-        }
+        },
       };
 
       const durationQuestion = {
@@ -50,21 +50,21 @@ function createRudimentCommand(): Command {
             return true;
           }
           return 'Duration must be positive';
-        }
+        },
       };
 
       const difficultyQuestion = {
         type: 'list' as const,
         name: 'difficulty',
         message: 'Difficulty:',
-        choices: ['beginner', 'intermediate', 'advanced']
+        choices: ['beginner', 'intermediate', 'advanced'],
       };
 
       const urlQuestion = {
         type: 'input' as const,
         name: 'url',
         message: 'Drumeo URL (optional):',
-        default: null
+        default: null,
       };
 
       const answers = await inquirer.prompt([
@@ -72,7 +72,7 @@ function createRudimentCommand(): Command {
         descriptionQuestion,
         durationQuestion,
         difficultyQuestion,
-        urlQuestion
+        urlQuestion,
       ] as any);
 
       try {
@@ -82,7 +82,7 @@ function createRudimentCommand(): Command {
           duration: answers.duration,
           difficulty: answers.difficulty,
           url: answers.url || null,
-          platform: answers.platform
+          platform: answers.platform,
         });
 
         console.log(chalk.green(`✅ Added rudiment: ${rudiment.name}`));
@@ -106,7 +106,7 @@ function createSongCommand(): Command {
             return true;
           }
           return 'Title is required';
-        }
+        },
       };
 
       const artistQuestion = {
@@ -118,7 +118,7 @@ function createSongCommand(): Command {
             return true;
           }
           return 'Artist is required';
-        }
+        },
       };
 
       const descriptionQuestion = {
@@ -130,7 +130,7 @@ function createSongCommand(): Command {
             return true;
           }
           return 'Description is required';
-        }
+        },
       };
 
       const tempoQuestion = {
@@ -143,21 +143,21 @@ function createSongCommand(): Command {
             return true;
           }
           return 'Tempo must be positive';
-        }
+        },
       };
 
       const difficultyQuestion = {
         type: 'list' as const,
         name: 'difficulty',
         message: 'Difficulty:',
-        choices: ['beginner', 'intermediate', 'advanced']
+        choices: ['beginner', 'intermediate', 'advanced'],
       };
 
       const urlQuestion = {
         type: 'input' as const,
         name: 'url',
         message: 'Drumeo URL (optional):',
-        default: null
+        default: null,
       };
 
       const answers = await inquirer.prompt([
@@ -166,7 +166,7 @@ function createSongCommand(): Command {
         descriptionQuestion,
         tempoQuestion,
         difficultyQuestion,
-        urlQuestion
+        urlQuestion,
       ] as any);
 
       try {
@@ -178,10 +178,12 @@ function createSongCommand(): Command {
           length: answers.length,
           platform: answers.platform,
           difficulty: answers.difficulty,
-          url: answers.url || null
+          url: answers.url || null,
         });
 
-        console.log(chalk.green(`✅ Added song: ${song.title} by ${song.artist}`));
+        console.log(
+          chalk.green(`✅ Added song: ${song.title} by ${song.artist}`)
+        );
         console.log(chalk.blue(`ID: ${song.id}`));
       } catch (error) {
         console.error(chalk.red('Error adding song:'), error);
@@ -199,16 +201,22 @@ function createListCommand(): Command {
       if (options.rudiments || (!options.songs && !options.rudiments)) {
         console.log(chalk.cyan('\n🥁 Rudiments:'));
         console.log(chalk.gray('─'.repeat(80)));
-        
+
         let rudiments = db.getAllRudiments();
         if (options.difficulty) {
-          rudiments = rudiments.filter(r => r.difficulty === options.difficulty);
+          rudiments = rudiments.filter(
+            (r) => r.difficulty === options.difficulty
+          );
         }
-        
-        rudiments.forEach(rudiment => {
+
+        rudiments.forEach((rudiment) => {
           console.log(chalk.yellow(`• ${rudiment.name}`));
           console.log(chalk.gray(`  ${rudiment.description}`));
-          console.log(chalk.gray(`  Difficulty: ${rudiment.difficulty} | Duration: ${rudiment.duration}min`));
+          console.log(
+            chalk.gray(
+              `  Difficulty: ${rudiment.difficulty} | Duration: ${rudiment.duration}min`
+            )
+          );
           if (rudiment.url) {
             console.log(chalk.blue(`  URL: ${rudiment.url}`));
           }
@@ -219,16 +227,20 @@ function createListCommand(): Command {
       if (options.songs || (!options.songs && !options.rudiments)) {
         console.log(chalk.cyan('\n🎵 Songs:'));
         console.log(chalk.gray('─'.repeat(80)));
-        
+
         let songs = db.getAllSongs();
         if (options.difficulty) {
-          songs = songs.filter(s => s.difficulty === options.difficulty);
+          songs = songs.filter((s) => s.difficulty === options.difficulty);
         }
-        
-        songs.forEach(song => {
+
+        songs.forEach((song) => {
           console.log(chalk.yellow(`• ${song.title} by ${song.artist}`));
           console.log(chalk.gray(`  ${song.description}`));
-          console.log(chalk.gray(`  Difficulty: ${song.difficulty} | Tempo: ${song.tempo} BPM`));
+          console.log(
+            chalk.gray(
+              `  Difficulty: ${song.difficulty} | Tempo: ${song.tempo} BPM`
+            )
+          );
           if (song.url) {
             console.log(chalk.blue(`  URL: ${song.url}`));
           }
@@ -247,7 +259,9 @@ function createDeleteCommand(): Command {
       if (options.rudiment) {
         const rudiment = db.getRudimentById(options.rudiment);
         if (!rudiment) {
-          console.error(chalk.red(`Rudiment with ID "${options.rudiment}" not found`));
+          console.error(
+            chalk.red(`Rudiment with ID "${options.rudiment}" not found`)
+          );
           return;
         }
 
@@ -256,8 +270,8 @@ function createDeleteCommand(): Command {
             type: 'confirm',
             name: 'confirm',
             message: `Delete rudiment "${rudiment.name}"?`,
-            default: false
-          }
+            default: false,
+          },
         ]);
 
         if (confirm) {
@@ -280,8 +294,8 @@ function createDeleteCommand(): Command {
             type: 'confirm',
             name: 'confirm',
             message: `Delete song "${song.title}" by ${song.artist}?`,
-            default: false
-          }
+            default: false,
+          },
         ]);
 
         if (confirm) {
@@ -293,7 +307,9 @@ function createDeleteCommand(): Command {
           }
         }
       } else {
-        console.error(chalk.red('Please specify --rudiment <id> or --song <id>'));
+        console.error(
+          chalk.red('Please specify --rudiment <id> or --song <id>')
+        );
       }
     });
 }

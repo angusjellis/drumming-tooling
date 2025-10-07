@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run Prettier to format code
+echo "🔧 Running Prettier..."
+npm run format
+
+# Run ESLint to check for linting errors (allow warnings but fail on errors)
+echo "🔍 Running ESLint..."
+npm run lint || {
+  echo "❌ ESLint found errors. Please fix them before committing."
+  exit 1
+}
+
+# Add the formatted files to the commit
+echo "✅ Adding formatted files to commit..."
+git add .
+
+echo "✅ Pre-commit checks passed!"

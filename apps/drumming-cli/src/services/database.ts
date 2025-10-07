@@ -59,7 +59,10 @@ export class DatabaseService {
 
   constructor() {
     // Use process.cwd() to get the workspace root, then navigate to the data file
-    this.dbPath = path.join(process.cwd(), 'apps/drumming-cli/src/data/database.json');
+    this.dbPath = path.join(
+      process.cwd(),
+      'apps/drumming-cli/src/data/database.json'
+    );
   }
 
   private readDatabase(): Database {
@@ -89,24 +92,28 @@ export class DatabaseService {
 
   getRudimentById(id: string): Rudiment | undefined {
     const db = this.readDatabase();
-    return db.rudiments.find(rudiment => rudiment.id === id);
+    return db.rudiments.find((rudiment) => rudiment.id === id);
   }
 
   getRudimentsByDifficulty(difficulty: string): Rudiment[] {
     const db = this.readDatabase();
-    return db.rudiments.filter(rudiment => rudiment.difficulty === difficulty);
+    return db.rudiments.filter(
+      (rudiment) => rudiment.difficulty === difficulty
+    );
   }
 
-  addRudiment(rudiment: Omit<Rudiment, 'id' | 'createdAt' | 'updatedAt'>): Rudiment {
+  addRudiment(
+    rudiment: Omit<Rudiment, 'id' | 'createdAt' | 'updatedAt'>
+  ): Rudiment {
     const db = this.readDatabase();
     const id = rudiment.name.toLowerCase().replace(/\s+/g, '-');
     const now = new Date().toISOString();
-    
+
     const newRudiment: Rudiment = {
       ...rudiment,
       id,
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     };
 
     db.rudiments.push(newRudiment);
@@ -114,10 +121,13 @@ export class DatabaseService {
     return newRudiment;
   }
 
-  updateRudiment(id: string, updates: Partial<Omit<Rudiment, 'id' | 'createdAt'>>): Rudiment | null {
+  updateRudiment(
+    id: string,
+    updates: Partial<Omit<Rudiment, 'id' | 'createdAt'>>
+  ): Rudiment | null {
     const db = this.readDatabase();
-    const index = db.rudiments.findIndex(rudiment => rudiment.id === id);
-    
+    const index = db.rudiments.findIndex((rudiment) => rudiment.id === id);
+
     if (index === -1) {
       return null;
     }
@@ -125,7 +135,7 @@ export class DatabaseService {
     db.rudiments[index] = {
       ...db.rudiments[index],
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     this.writeDatabase(db);
@@ -134,8 +144,8 @@ export class DatabaseService {
 
   deleteRudiment(id: string): boolean {
     const db = this.readDatabase();
-    const index = db.rudiments.findIndex(rudiment => rudiment.id === id);
-    
+    const index = db.rudiments.findIndex((rudiment) => rudiment.id === id);
+
     if (index === -1) {
       return false;
     }
@@ -153,24 +163,24 @@ export class DatabaseService {
 
   getSongById(id: string): Song | undefined {
     const db = this.readDatabase();
-    return db.songs.find(song => song.id === id);
+    return db.songs.find((song) => song.id === id);
   }
 
   getSongsByDifficulty(difficulty: string): Song[] {
     const db = this.readDatabase();
-    return db.songs.filter(song => song.difficulty === difficulty);
+    return db.songs.filter((song) => song.difficulty === difficulty);
   }
 
   addSong(song: Omit<Song, 'id' | 'createdAt' | 'updatedAt'>): Song {
     const db = this.readDatabase();
     const id = song.title.toLowerCase().replace(/\s+/g, '-');
     const now = new Date().toISOString();
-    
+
     const newSong: Song = {
       ...song,
       id,
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     };
 
     db.songs.push(newSong);
@@ -178,10 +188,13 @@ export class DatabaseService {
     return newSong;
   }
 
-  updateSong(id: string, updates: Partial<Omit<Song, 'id' | 'createdAt'>>): Song | null {
+  updateSong(
+    id: string,
+    updates: Partial<Omit<Song, 'id' | 'createdAt'>>
+  ): Song | null {
     const db = this.readDatabase();
-    const index = db.songs.findIndex(song => song.id === id);
-    
+    const index = db.songs.findIndex((song) => song.id === id);
+
     if (index === -1) {
       return null;
     }
@@ -189,7 +202,7 @@ export class DatabaseService {
     db.songs[index] = {
       ...db.songs[index],
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     this.writeDatabase(db);
@@ -198,8 +211,8 @@ export class DatabaseService {
 
   deleteSong(id: string): boolean {
     const db = this.readDatabase();
-    const index = db.songs.findIndex(song => song.id === id);
-    
+    const index = db.songs.findIndex((song) => song.id === id);
+
     if (index === -1) {
       return false;
     }

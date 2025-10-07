@@ -6,7 +6,11 @@ export const metronomeCommand = new Command('metronome')
   .description('Start a metronome with customizable tempo')
   .option('-t, --tempo <bpm>', 'Tempo in beats per minute', '120')
   .option('-s, --subdivision <subdivision>', 'Subdivision (1, 2, 4, 8)', '4')
-  .option('-d, --duration <seconds>', 'Duration in seconds (0 for infinite)', '0')
+  .option(
+    '-d, --duration <seconds>',
+    'Duration in seconds (0 for infinite)',
+    '0'
+  )
   .action(async (options) => {
     const tempo = parseInt(options.tempo);
     const subdivision = parseInt(options.subdivision);
@@ -28,9 +32,9 @@ export const metronomeCommand = new Command('metronome')
     console.log(chalk.gray('Press Ctrl+C to stop'));
     console.log('');
 
-    const intervalMs = (60000 / tempo) / subdivision;
+    const intervalMs = 60000 / tempo / subdivision;
     let beatCount = 0;
-    let startTime = Date.now();
+    const startTime = Date.now();
 
     const spinner = ora('Playing...').start();
 
@@ -42,11 +46,15 @@ export const metronomeCommand = new Command('metronome')
       // Visual beat indicator
       const beatInMeasure = ((beatCount - 1) % subdivision) + 1;
       const isDownbeat = beatInMeasure === 1;
-      
+
       if (isDownbeat) {
-        spinner.text = chalk.green(`🔴 BEAT ${beatCount} (${elapsed.toFixed(1)}s)`);
+        spinner.text = chalk.green(
+          `🔴 BEAT ${beatCount} (${elapsed.toFixed(1)}s)`
+        );
       } else {
-        spinner.text = chalk.blue(`🔵 beat ${beatCount} (${elapsed.toFixed(1)}s)`);
+        spinner.text = chalk.blue(
+          `🔵 beat ${beatCount} (${elapsed.toFixed(1)}s)`
+        );
       }
 
       // Audio feedback (console beep)
@@ -55,7 +63,9 @@ export const metronomeCommand = new Command('metronome')
       // Check duration limit
       if (duration > 0 && elapsed >= duration) {
         clearInterval(metronomeInterval);
-        spinner.succeed(chalk.green(`Metronome completed after ${duration} seconds`));
+        spinner.succeed(
+          chalk.green(`Metronome completed after ${duration} seconds`)
+        );
         process.exit(0);
       }
     }, intervalMs);
